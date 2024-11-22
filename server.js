@@ -25,6 +25,20 @@ app.get('/test', (req, res) => {
   res.send('test')
 })
 
+app.get('/Movie/add', (req, res) => {
+  const sql = `INSERT INTO movie (
+  ``movie_thumnail``, 
+  ``movie_title``, 
+  ``movie_trailer_video``, 
+  ``movie_description``, 
+  ``movie_genre``,
+  ``movie_rate``,
+  ``movie_duration``,
+  ``movie_dub``,
+  ``movie_sub``,
+  ) VALUES (?)`;
+})
+
 
 // app.post('/product', (req, res) => {
 //   const sql = "INSERT INTO product (`pd_id`, `pd_name`, `pd_type`, `pd_unit_price`, `pd_status`) VALUES (?)";
