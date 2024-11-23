@@ -9,6 +9,8 @@ const customerRouter = require('./route/Customer')
 const app = express()
 app.use(express.json())
 
+app.use(cors());
+
 // app.get('/', (req, res) => {
 //   const sql = "SELECT * FROM admin"
 //   connection.query(sql, (err, result) =>{
@@ -38,7 +40,7 @@ app.use("/booking", bookingRouter)
   // })
 // })
 
-
-app.listen(3306, ()=>{
-  console.log("Listening")
+const port = 3306;
+app.listen(port, ()=>{
+  console.log(`Server running on port ${port}`);
 })

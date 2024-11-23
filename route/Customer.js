@@ -11,13 +11,12 @@ router.get('/get', (req, res) => {
 })
 
 router.post('/add', (req, res) => {
-  const sql = "INSERT INTO customer (`customer_username`, `customer_name`, `customer_surname`, `customer_email`, `customer_password`,`customer_credit`,`customer_phone_number`,) VALUES (?)";
+  const sql = "INSERT INTO customer (`customer_username`, `customer_name`, `customer_surname`, `customer_email`,`customer_credit`,`customer_phone_number`,) VALUES (?)";
   const values = [
     req.body.cs_username,
     req.body.cs_name,
     req.body.cs_surname,
     req.body.cs_email,
-    req.body.cs_password,
     req.body.cs_credit,
     req.body.cs_phone_number,
   ]
@@ -28,13 +27,12 @@ router.post('/add', (req, res) => {
 })
 
 router.post('/edit', (req, res) => {
-  const sql = "UPDATE customer SET `customer_username` = ?, `customer_name` = ?, `customer_surname` = ?, `customer_email` = ?, `customer_password` = ?,`customer_credit` = ?,`customer_phone_number` = ?  WHERE customer_id = ?";
+  const sql = "UPDATE customer SET `customer_username` = ?, `customer_name` = ?, `customer_surname` = ?, `customer_email` = ?,`customer_credit` = ?,`customer_phone_number` = ?  WHERE customer_id = ?";
   const values = [
     req.body.cs_username,
     req.body.cs_name,
     req.body.cs_surname,
     req.body.cs_email,
-    req.body.cs_password,
     req.body.cs_credit,
     req.body.cs_phone_number,
   ]
@@ -51,5 +49,21 @@ router.post('/delete', (req, res) => {
     return res.json(result);
   })
 })
+
+router.post('/addNewCustomer', (req, res) => {
+  const sql = "INSERT INTO customer (`customer_id`, `customer_username`, `customer_name`, `customer_surname`, `customer_email`, `customer_phone_number`) VALUES (?)";
+  const values = [
+    req.query.cs_id,
+    req.query.cs_username,
+    req.query.cs_name,
+    req.query.cs_surname,
+    req.query.cs_email,
+    req.query.cs_phone_number,
+  ];
+  db.getConnection().query(sql, [values], (err, result) => {
+    if (err) return res.json(err);
+    return res.json(result);
+  });
+});
 
 module.exports = router
