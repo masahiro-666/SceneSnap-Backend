@@ -75,4 +75,13 @@ router.get('/edit/test', (req, res) => {
   })
 })
 
+router.post('/delete', (req, res) => {
+  const sql = "DELETE FROM movie WHERE movie_id = ?";
+  db.getConnection().query(sql, [values], (err, result) => {
+    if(err) return res.json(err);
+    return res.json(result);
+  })
+})
+
+
 module.exports = router

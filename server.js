@@ -9,7 +9,6 @@ const customerRouter = require('./route/Customer')
 const app = express()
 app.use(express.json())
 
-
 // app.get('/', (req, res) => {
 //   const sql = "SELECT * FROM admin"
 //   connection.query(sql, (err, result) =>{
@@ -22,17 +21,6 @@ app.use("/admin", adminRouter)
 app.use("/movie", movieRouter)
 app.use("/customer", customerRouter)
 app.use("/booking", bookingRouter)
-
-
-
-
-app.get('/test', (req, res) => {
-  res.send('test')
-})
-
-
-
-
 
 // app.post('/product', (req, res) => {
 //   const sql = "INSERT INTO product (`pd_id`, `pd_name`, `pd_type`, `pd_unit_price`, `pd_status`) VALUES (?)";
