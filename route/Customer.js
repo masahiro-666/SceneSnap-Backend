@@ -10,6 +10,17 @@ router.get('/get', (req, res) => {
   })
 })
 
+router.get('/getEachUser/:customer_id', (req, res) => {
+  const customerId = req.params.customer_id;
+  const sql = "SELECT * FROM customer WHERE customer_id = ?";
+  
+  db.getConnection().query(sql, [customerId], (err, result) => {
+    if(err) return res.json({Message: "Error fetching user data"});
+    if(result.length === 0) return res.json({Message: "User not found"});
+    return res.json(result[0]);
+  });
+});
+
 router.post('/add', (req, res) => {
   const sql = "INSERT INTO customer (`customer_username`, `customer_name`, `customer_surname`, `customer_email`,`customer_credit`,`customer_phone_number`,) VALUES (?)";
   const values = [
