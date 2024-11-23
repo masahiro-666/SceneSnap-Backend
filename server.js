@@ -1,60 +1,55 @@
-import express from 'express'
-import mysql from 'mysql'
-import cors from 'cors'
+const express = require('express')
+const mysql = require('mysql')
+const cors = require('cors')
+const adminRouter = require('./route/Admin')
+const movieRouter = require('./route/Movie')
+const bookingRouter = require('./route/Booking')
+const customerRouter = require('./route/Customer')
 
 const app = express()
-app.use(cors())
 app.use(express.json())
 
-const db = mysql.createConnection({
-  host: "scenesnap.c92wg8iy607d.ap-southeast-1.rds.amazonaws.com",
-  user: "root",
-  password: "SceneSnap666!",
-  database: "SceneSnap"
-})
 
-app.get('/', (req, res) => {
-  const sql = "SELECT * FROM admin"
-  db.query(sql, (err, result) =>{
-    if(err) return res.json({Message: "Error inside server"});
-    return res.json(result);
-  })
-})
+// app.get('/', (req, res) => {
+//   const sql = "SELECT * FROM admin"
+//   connection.query(sql, (err, result) =>{
+//     if(err) return res.json({Message: "Error inside server"});
+//     return res.json(result);
+//   })
+// })
+
+app.use("/admin", adminRouter)
+app.use("/movie", movieRouter)
+app.use("/customer", customerRouter)
+app.use("/booking", bookingRouter)
+
+
+
 
 app.get('/test', (req, res) => {
   res.send('test')
 })
 
-app.get('/Movie/add', (req, res) => {
-  const sql = `INSERT INTO movie (
-  ``movie_thumnail``, 
-  ``movie_title``, 
-  ``movie_trailer_video``, 
-  ``movie_description``, 
-  ``movie_genre``,
-  ``movie_rate``,
-  ``movie_duration``,
-  ``movie_dub``,
-  ``movie_sub``,
-  ) VALUES (?)`;
-})
+
+
 
 
 // app.post('/product', (req, res) => {
 //   const sql = "INSERT INTO product (`pd_id`, `pd_name`, `pd_type`, `pd_unit_price`, `pd_status`) VALUES (?)";
 //   console.log(req.body)
-//   const values = [
-//     req.body.id,
-//     req.body.name,
-//     req.body.type,
-//     req.body.price,
-//     req.body.status
-//   ]
-//   db.query(sql, [values], (err, result) => {
-//     if(err) return res.json(err);
-//     return res.json(result);
-//   })
+  // const values = [
+  //   req.body.id,
+  //   req.body.name,
+  //   req.body.type,
+  //   req.body.price,
+  //   req.body.status
+  // ]
+  // connection.query(sql, [values], (err, result) => {
+  //   if(err) return res.json(err);
+  //   return res.json(result);
+  // })
 // })
+
 
 app.listen(3306, ()=>{
   console.log("Listening")
