@@ -1,7 +1,8 @@
-const mysql = require('mysql2')
+const mysql = require('mysql2');
 const express = require('express');
 require('dotenv').config();
-const app = express()
+
+const app = express();
 
 const connection = mysql.createConnection({
   host: process.env.MYSQL_SERVER,
@@ -11,7 +12,7 @@ const connection = mysql.createConnection({
   insecureAuth: true,
   enableKeepAlive: true,
   keepAliveInitialDelay: 10000,
-})
+});
 
 connection.connect((err) => {
   if (err) {
@@ -19,7 +20,7 @@ connection.connect((err) => {
     throw err;
   }
   console.log('Connected to MySQL!');
-  connection.query('USE SceneSnap;', (err, result) => {
+  connection.query('USE SceneSnap;', (err) => {
     if (err) {
       console.error('Error selecting database:', err);
       throw err;
@@ -29,11 +30,9 @@ connection.connect((err) => {
 });
 
 function getConnection() {
-  return connection
+  return connection;
 }
-
 
 module.exports = {
-  getConnection
-}
-
+  getConnection,
+};

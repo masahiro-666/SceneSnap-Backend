@@ -6,6 +6,8 @@ const movieRouter = require('./route/Movie')
 const bookingRouter = require('./route/Booking')
 const customerRouter = require('./route/Customer')
 
+const generateUploadURL =require('./s3')
+
 const app = express()
 app.use(express.json())
 
@@ -23,6 +25,11 @@ app.use("/admin", adminRouter)
 app.use("/movie", movieRouter)
 app.use("/customer", customerRouter)
 app.use("/booking", bookingRouter)
+
+app.get('/s3Url', async (req, res) => {
+  const url = await generateUploadURL()
+  res.send({url})
+})
 
 // app.post('/product', (req, res) => {
 //   const sql = "INSERT INTO product (`pd_id`, `pd_name`, `pd_type`, `pd_unit_price`, `pd_status`) VALUES (?)";
