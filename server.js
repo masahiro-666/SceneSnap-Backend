@@ -1,53 +1,64 @@
-const express = require('express')
-const mysql = require('mysql')
-const cors = require('cors')
-const adminRouter = require('./route/Admin')
-const movieRouter = require('./route/Movie')
-const bookingRouter = require('./route/Booking')
-const customerRouter = require('./route/Customer')
+const express = require('express');
+const mysql = require('mysql2');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const generateUploadURL = require('./s3'); // Your function for S3 upload URL
+const adminRouter = require('./route/Admin');
+const movieRouter = require('./route/Movie');
+const bookingRouter = require('./route/Booking');
+const customerRouter = require('./route/Customer');
 
-const generateUploadURL =require('./s3')
+dotenv.config();
+const app = express();
 
-const app = express()
-app.use(express.json())
+// Create a MySQL connection pool
+const pool = mysql.createPool({
+  host: process.env.MYSQL_SERVER,
+  port: process.env.MYSQL_SERVER_PORT,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: 'SceneSnap', // Directly set the database here
+  insecureAuth: true,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 10000,
+});
 
-app.use(cors());
+app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(cors({
+  origin: '*'
+})); // Enable CORS
 
-// app.get('/', (req, res) => {
-//   const sql = "SELECT * FROM admin"
-//   connection.query(sql, (err, result) =>{
-//     if(err) return res.json({Message: "Error inside server"});
-//     return res.json(result);
-//   })
-// })
+// Test MySQL connection
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    throw err;
+  }
+  console.log('Connected to MySQL!');
+  connection.release(); // Release the connection after test
+});
 
-app.use("/admin", adminRouter)
-app.use("/movie", movieRouter)
-app.use("/customer", customerRouter)
-app.use("/booking", bookingRouter)
+// Routes
+app.use("/admin", adminRouter);
+app.use("/movie", movieRouter);
+app.use("/customer", customerRouter);
+app.use("/booking", bookingRouter);
 
+// S3 URL generation endpoint
 app.get('/s3Url', async (req, res) => {
-  const url = await generateUploadURL()
-  res.send({url})
-})
+  try {
+    const url = await generateUploadURL();
+    res.json({ url });
+  } catch (error) {
+    console.error("Error generating upload URL:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-// app.post('/product', (req, res) => {
-//   const sql = "INSERT INTO product (`pd_id`, `pd_name`, `pd_type`, `pd_unit_price`, `pd_status`) VALUES (?)";
-//   console.log(req.body)
-  // const values = [
-  //   req.body.id,
-  //   req.body.name,
-  //   req.body.type,
-  //   req.body.price,
-  //   req.body.status
-  // ]
-  // connection.query(sql, [values], (err, result) => {
-  //   if(err) return res.json(err);
-  //   return res.json(result);
-  // })
-// })
-
+// Start the Express server
 const port = 3306;
-app.listen(port, ()=>{
+app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-})
+});
+
+module.exports = { pool };

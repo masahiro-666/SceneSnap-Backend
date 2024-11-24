@@ -1,78 +1,43 @@
-const mysql = require('mysql2')
-const express = require('express');
-require('dotenv').config();
-const app = express()
-
-const connection = mysql.createConnection({
-  host: process.env.MYSQL_SERVER,
-  port: process.env.MYSQL_SERVER_PORT,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  insecureAuth: true,
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 10000,
-})
-
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err);
-    throw err;
-  }
-  console.log('Connected to MySQL!');
-  connection.query('USE SceneSnap;', (err, result) => {
-    if (err) {
-      console.error('Error selecting database:', err);
-      throw err;
-    }
-    console.log('Connected to SceneSnap database');
-  });
-});
-
-function getConnection() {
-  return connection
-}
-
-
-module.exports = {
-  getConnection
-}
-
-
-
-And
-
 const dotenv = require('dotenv');
-const aws = require('aws-sdk');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const crypto = require('crypto');
 const { promisify } = require('util');
 const randomBytes = promisify(crypto.randomBytes);
 
 dotenv.config();
 
-const region = "ap-southeast-1";
-const bucketName = "scenesnap-buckets";
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+const region = 'ap-southeast-1';
+const bucketName = 'scenesnap-buckets';
 
-const s3 = new aws.S3({
+const s3Client = new S3Client({
   region,
-  accessKeyId,
-  secretAccessKey,
-  signatureVersion: 'v4'
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
-async function generateUploadURL() {
-  const rawBytes = await randomBytes(16);
-  const imageName = rawBytes.toString('hex');
+async function generateUploadURL(contentType = 'image/jpeg') {
+  try {
+    // Generate random image name
+    const rawBytes = await randomBytes(16);
+    const imageName = `${Date.now()}-${rawBytes.toString('hex')}`; // Add timestamp to avoid collisions
 
-  const params = {
-    Bucket: bucketName,
-    Key: imageName,
-    Expires: 60
-  };
+    // Create S3 upload parameters
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: imageName,
+      ContentType: contentType, // Dynamically set the content type
+    });
 
-  const uploadURL = await s3.getSignedUrlPromise('putObject', params);
-  return uploadURL;
+    // Generate the signed URL for upload
+    const uploadURL = await getSignedUrl(s3Client, command, { expiresIn: 60 });
+    return uploadURL;
+  } catch (error) {
+    console.error('Error generating upload URL:', error);
+    throw new Error('Error generating upload URL');
+  }
 }
 
 module.exports = { generateUploadURL };
