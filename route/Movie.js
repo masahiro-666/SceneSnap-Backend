@@ -21,6 +21,47 @@ router.get('/getEachMovie/:movie_id', (req, res) => {
   });
 });
 
+router.post('/booking/:movie_id', (req, res) => {
+  const movieId = req.params.movie_id;
+  const { bookedSeats } = req.body;
+
+  if (!bookedSeats || bookedSeats.length === 0) {
+    return res.status(400).json({ Message: "No bookedSeats provided" });
+  }
+
+  const fetchSql = "SELECT movie_cinema_seats FROM movie WHERE movie_id = ?";
+  const updateSql = "UPDATE movie SET movie_cinema_seats = ? WHERE movie_id = ?";
+
+  db.getConnection().query(fetchSql, [movieId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ Message: "Error fetching movie data" });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ Message: "Movie not found" });
+    }
+
+    const currentSeats = result[0].movie_cinema_seats || "";
+    const updatedSeats = currentSeats
+      ? `${currentSeats},${bookedSeats.join(",")}`
+      : bookedSeats.join(",");
+
+    db.getConnection().query(updateSql, [updatedSeats, movieId], (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ Message: "Error updating movie data" });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ Message: "Movie not found or no update made" });
+      }
+
+      return res.status(200).json({ Message: "Booking updated successfully", UpdatedSeats: updatedSeats });
+    });
+  });
+});
+
 // router.get('/add/test', (req, res) => {
 //   const sql = "INSERT INTO movie (`movie_title`) VALUES ('chainsaw man')";
 //   db.getConnection().query(sql, (err, result) =>{
