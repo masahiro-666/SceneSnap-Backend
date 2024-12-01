@@ -10,6 +10,17 @@ router.get('/get', (req, res) => {
   })
 })
 
+router.get('/getEachMovie/:movie_id', (req, res) => {
+  const movieId = req.params.movie_id;
+  const sql = "SELECT * FROM movie WHERE movie_id = ?";
+  
+  db.getConnection().query(sql, [movieId], (err, result) => {
+    if(err) return res.json({Message: "Error fetching movie data"});
+    if(result.length === 0) return res.json({Message: "Movie not found"});
+    return res.json(result[0]);
+  });
+});
+
 // router.get('/add/test', (req, res) => {
 //   const sql = "INSERT INTO movie (`movie_title`) VALUES ('chainsaw man')";
 //   db.getConnection().query(sql, (err, result) =>{
