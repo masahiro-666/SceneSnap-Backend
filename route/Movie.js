@@ -19,17 +19,17 @@ router.get('/get', (req, res) => {
 // })
 
 router.post('/add', (req, res) => {
-  const sql = "INSERT INTO movie (`movie_thumbnail`, `movie_title`, `movie_trailer_video`, `movie_description`, `movie_genre`,`movie_rate`,`movie_duration`,`movie_dub`,`movie_sub`,) VALUES (?)";
+  const sql = "INSERT INTO movie (`movie_thumbnail`, `movie_title`, `movie_trailer_video`, `movie_genre`,`movie_rate`,`movie_duration`,`movie_dub`,`movie_sub`) VALUES (?)";
+  console.log(req.body)
   const values = [
-    req.body.thumbnail,
-    req.body.title,
-    req.body.trailer_video,
-    req.body.description,
-    req.body.genre,
-    req.body.rate,
-    req.body.duration,
-    req.body.dub,
-    req.body.sub,
+    req.body.movie_thumbnail,
+    req.body.movie_title,
+    req.body.movie_trailer_video,
+    req.body.movie_genre,
+    req.body.movie_rate,
+    req.body.movie_duration,
+    req.body.movie_dub,
+    req.body.movie_sub,
   ]
   db.getConnection().query(sql, [values], (err, result) => {
     if(err) return res.json(err);
@@ -37,21 +37,42 @@ router.post('/add', (req, res) => {
   })
 })
 
-router.post('/edit', (req, res) => {
-  const sql = "UPDATE movie SET `movie_thumbnail` = ?, `movie_title` = ?, `movie_trailer_video` = ?, `movie_description` = ?, `movie_genre` = ?,`movie_rate` = ?,`movie_duration` = ?,`movie_dub` = ?,`movie_sub` = ? WHERE movie_id = ?";
-  const values = [
-    req.body.thumbnail,
-    req.body.title,
-    req.body.trailer_video,
-    req.body.description,
-    req.body.genre,
-    req.body.rate,
-    req.body.duration,
-    req.body.dub,
-    req.body.sub,
-  ]
-  db.getConnection().query(sql, [values], (err, result) => {
+router.put('/edit/:id', (req, res) => {
+  const id = req.params.id
+  const sql = "UPDATE movie SET `movie_thumbnail` = ?, `movie_title` = ?, `movie_trailer_video` = ?, `movie_genre` = ?,`movie_rate` = ?,`movie_duration` = ?,`movie_dub` = ?,`movie_sub` = ? WHERE movie_id = ?";
+  //  const values = [
+  //   req.body.movie_thumbnail,
+  //   req.body.movie_title,
+  //   req.body.movie_trailer_video,
+  //   req.body.movie_genre,
+  //   req.body.movie_rate,
+  //   req.body.movie_duration,
+  //   req.body.movie_dub,
+  //   req.body.movie_sub,
+  // ]
+  // console.log(values)
+
+  db.getConnection().query(sql, [
+    req.body.movie_thumbnail,
+    req.body.movie_title,
+    req.body.movie_trailer_video,
+    req.body.movie_genre,
+    req.body.movie_rate,
+    req.body.movie_duration,
+    req.body.movie_dub,
+    req.body.movie_sub, id], (err, result) => {
     if(err) return res.json(err);
+    return res.json(result);
+  })
+})
+
+router.get('/read/:id', (req, res) => {
+  const sql = "SELECT * FROM movie WHERE movie_id = ?";
+  const id = req.params.id
+  console.log(id)
+
+  db.getConnection().query(sql,[id], (err, result) => {
+    if(err) return res.json({Message : "Error inside server"});
     return res.json(result);
   })
 })
@@ -62,7 +83,6 @@ router.get('/edit/test', (req, res) => {
     req.body.thumbnail,
     req.body.title,
     req.body.trailer_video,
-    req.body.description,
     req.body.genre,
     req.body.rate,
     req.body.duration,
@@ -75,10 +95,11 @@ router.get('/edit/test', (req, res) => {
   })
 })
 
-router.post('/delete', (req, res) => {
+router.delete('/delete/:id', (req, res) => {
   const sql = "DELETE FROM movie WHERE movie_id = ?";
-  db.getConnection().query(sql, [values], (err, result) => {
-    if(err) return res.json(err);
+  const id = req.params.id
+  db.getConnection().query(sql, [id], (err, result) => {
+    if(err) return res.json({Message: "Error inside server"});
     return res.json(result);
   })
 })

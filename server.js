@@ -10,6 +10,7 @@ const customerRouter = require('./route/Customer');
 
 dotenv.config();
 const app = express();
+app.use(express.json())
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
