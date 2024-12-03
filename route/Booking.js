@@ -11,13 +11,12 @@ router.get('/get', (req, res) => {
 })
 
 router.post('/add', (req, res) => {
-  const sql = "INSERT INTO booking (`booking_id`, `customer_id`, `movie_id`, `booking_seat`, `booking_at`) VALUES (?)";
+  const sql = "INSERT INTO booking (`customer_id`, `movie_id`, `booking_seat`) VALUES (?)";
+  const { customer_id, movie_id, booking_seat } = req.body;
   const values = [
-    req.body.b_id,
-    req.body.cs_id,
-    req.body.m_id,
-    req.body.b_seat,
-    req.body.b_at,
+    customer_id,
+    movie_id,
+    booking_seat,
   ]
   db.getConnection().query(sql, [values], (err, result) => {
     if(err) return res.json(err);

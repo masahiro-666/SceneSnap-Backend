@@ -37,6 +37,20 @@ router.post('/add', (req, res) => {
   })
 })
 
+router.put('/processCredit/:id', (req,res) => {
+  const id = req.params.id
+  const {process_credit } = req.body;
+  const values = [
+    process_credit
+  ]
+  const sql = "UPDATE customer SET `customer_credit` = ? WHERE customer_id = ?"
+
+  db.getConnection().query(sql, [values, id], (err, result) => {
+    if(err) return res.json(err);
+    return res.json(result);
+  })
+})
+
 router.post('/edit', (req, res) => {
   const sql = "UPDATE customer SET `customer_username` = ?, `customer_name` = ?, `customer_surname` = ?, `customer_email` = ?,`customer_credit` = ?,`customer_phone_number` = ?  WHERE customer_id = ?";
   const values = [

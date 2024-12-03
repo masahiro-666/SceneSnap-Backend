@@ -8,6 +8,7 @@ const movieRouter = require('./route/Movie');
 const bookingRouter = require('./route/Booking');
 const customerRouter = require('./route/Customer');
 
+
 dotenv.config();
 const app = express();
 app.use(express.json())
