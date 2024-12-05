@@ -43,10 +43,9 @@ o	Booking History: Customers can view a list of their current and past bookings,
 o	Movie Management: Admins can add, update, and delete movie listings, including details like genre, trailer, and showtimes.
 
 # Scene-Snap Cinema booking and management
-# สมาชิกกลุ่ม
-# <sup><sub>1.Kritchapol Suwanwuttiwat​ 1650705583 </sub></sup>
-# <sup><sub>2.Mr. Kittikan Khonaban  1650704271 </sub></sup>
-# <sup><sub>3.Tirawat Saelim 1650700535 </sub></sup>
+## Member
+ 1. Kritchapol Suwanwuttiwat 1650705583
+ 2. Kittikan Khonaban 1650704271
+ 3. Tirawat Saelim 1650700535
 -----------------------------------------------------------------------------------------
-##
 [Youtube Presentation](https://youtu.be/LHBpvh_nqkg)
