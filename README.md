@@ -1,12 +1,10 @@
-# Back-end
-<br>
 Purpose:
 The Cinema Booking and Movie Management System is designed to streamline cinema operations, improve the booking process for customers, and provide admins with tools to manage movies, customer interactions, and bookings efficiently. The system offers a seamless way for customers to browse and book movies, while allowing administrators to manage the cinema's offerings and user data.
 Key objectives include:
 •	Automating seat bookings and movie reservations.
 •	Simplifying movie management for administrators.
 •	Enhancing customer experience by providing easy access to available movies and bookings.
-<br>
+________________________________________
 Users:
 1.	Customer:
 o	Role: Customers can browse movies and book seats
@@ -18,7 +16,7 @@ o	Responsibilities:
 o	Role: Administrators manage movie listings.
 o	Responsibilities:
 	Add, update, and remove movie listings, including titles, genres, trailers, and ratings.
-<br>
+________________________________________
  
 Features:
 1.	For Customers:
