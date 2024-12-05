@@ -6,7 +6,7 @@ Key objectives include:
 •	Automating seat bookings and movie reservations.
 •	Simplifying movie management for administrators.
 •	Enhancing customer experience by providing easy access to available movies and bookings.
-________________________________________
+<br>
 Users:
 1.	Customer:
 o	Role: Customers can browse movies and book seats
@@ -18,7 +18,7 @@ o	Responsibilities:
 o	Role: Administrators manage movie listings.
 o	Responsibilities:
 	Add, update, and remove movie listings, including titles, genres, trailers, and ratings.
-________________________________________
+<br>
  
 Features:
 1.	For Customers:
