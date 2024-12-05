@@ -9,13 +9,13 @@ Users:
 1.	Customer:
 o	Role: Customers can browse movies and book seats
 o	Responsibilities:
-	Browse available movies, view details such as title, genre, duration, and trailer.
-	Book seats for movies based on available showtimes.
-	View current and past bookings.
+	- Browse available movies, view details such as title, genre, duration, and trailer.
+	- Book seats for movies based on available showtimes.
+	- View current and past bookings.
 2.	Administrator (Admin):
 o	Role: Administrators manage movie listings.
 o	Responsibilities:
-	Add, update, and remove movie listings, including titles, genres, trailers, and ratings.
+	- Add, update, and remove movie listings, including titles, genres, trailers, and ratings.
 ________________________________________
  
 Features:
